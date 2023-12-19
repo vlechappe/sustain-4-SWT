@@ -88,20 +88,15 @@ display_popup()
 
 // Update of images in github repo can take time, be patient, delete the files and try again...
 
-//url_roughness = "https://vlechappe.github.io/map/roughness_AURA_small.tif"
-url_roughness = "https://vlechappe.github.io/map/roughness_AURA_cropped.tif"
-//url_roughness = "https://vlechappe.github.io/map/roughness_AURA.tif"
+url_roughness = "./images/roughness/roughness_AURA_cropped.tif"
 const promise_roughness = fetch_response(url_roughness);
 //console.log(promise_roughness)
 
-//url_windspeed = "https://vlechappe.github.io/map/windspeed_AURA_100m_small.tif"
-url_windspeed = "https://vlechappe.github.io/map/windspeed_AURA_10m_cropped.tif"
-//url_windspeed = "https://vlechappe.github.io/map/windspeed_AURA_100m_resize.tif"
+url_windspeed = "./images/windspeed/windspeed_AURA_10m_cropped.tif"
 const promise_windspeed = fetch_response(url_windspeed);
 //console.log(promise_windspeed)
 
-url_optimal_height = "https://vlechappe.github.io/map/optimal_height_cropped.tif"
-//url_optimal_height = "https://vlechappe.github.io/map/optimal_height.tif"
+url_optimal_height = "./images/optimal_height/optimal_height_cropped.tif"
 const promise_optimal_height = fetch_response(url_optimal_height);
 //console.log(promise_optimal_height)
 
