@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+    <style>
+      #map {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/georaster"></script>
+    <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="./my_lib.js"></script>
+
+
+
+<script>
+
+// initialize leaflet map, centered on lat=0/lon=0 but not important because the initial value will be centered later on the raster layer
+// initial zoom is 5 
+var map = L.map('map').setView([0, 0], 5);
+
+// add OpenStreetMap tiles (other tiles can be chosen)
+var openstreetmap = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// roughness ca only take a finite number of values so the colormap will be discrete
+const roughness_values = [0 ,0.003, 0.005, 0.01, 0.03, 0.05, 0.1, 0.2, 0.3, 0.6, 0.8, 1, 1.2, 1.5];
+const roughness_intervals = [0.0015, 0.004, 0.0075, 0.02, 0.04, 0.075, 0.15, 0.25, 0.45, 0.7, 0.9, 1.1, 1.35];
+const roughness_colors = ['#ff7f0eff','#2ca02cff','#1f77b4ff','#d62728ff','#8c564bff','#9467bdff','#e377c2ff','#7f7f7fff','#bcbd22ff','#17becfff','#1f77b4ff','#ffffbf','#fddbc7','#000000'];
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// windspeed colormap is continous between interval values (we could have extracted these values from the raster as well
+const windspeed_interval = [0,20];
+const windspeed_colormap = {};
+windspeed_colormap.color = d3.scale.linear()
+      .domain(windspeed_interval)
+      .range(['orange', 'black']);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// optimal height is continous between interval values (we could have extracted these values from the raster as well
+const optimal_height_interval = [12,30];
+const optimal_height_colormap = {};
+optimal_height_colormap.color = d3.scale.linear()
+      .domain(optimal_height_interval)
+      .range(['green', 'black']);    
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// create this variable in order to update it the promise management and to be used in the layer control
+var layer_control = {
+      base_layers : {
+          "openstreetmap" : openstreetmap,
+      },
+      overlays :  {
+          //"Windspeed map" : image_overlay,
+          //"Roughness length map" : image_overlay,
+      },
+  };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// display the colorbar of the legends (totally independent from the raster layer) 
+/////////////////////////////////////////////////////
+legend_roughness(roughness_intervals, roughness_colors)   
+/////////////////////////////////////////////////////
+legend_continuous(windspeed_interval, windspeed_colormap, "Windspeed (m/s)")
+/////////////////////////////////////////////////////
+legend_continuous(optimal_height_interval, optimal_height_colormap, "Optimal height (m)")
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// display a customized pop up with windspeed, roughness and optimal height need
+display_popup()
+
+// plot marker to check the projection accuracy
+//plot_markers()
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////          display raster layers           //////////////////////////////////  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Update of images in github repo can take time, be patient, delete the files and try again...
+
+//url_roughness = "https://vlechappe.github.io/map/roughness_AURA_small.tif"
+url_roughness = "https://vlechappe.github.io/map/roughness_AURA_cropped.tif"
+//url_roughness = "https://vlechappe.github.io/map/roughness_AURA.tif"
+const promise_roughness = fetch_response(url_roughness);
+//console.log(promise_roughness)
+
+//url_windspeed = "https://vlechappe.github.io/map/windspeed_AURA_100m_small.tif"
+url_windspeed = "https://vlechappe.github.io/map/windspeed_AURA_10m_cropped.tif"
+//url_windspeed = "https://vlechappe.github.io/map/windspeed_AURA_100m_resize.tif"
+const promise_windspeed = fetch_response(url_windspeed);
+//console.log(promise_windspeed)
+
+url_optimal_height = "https://vlechappe.github.io/map/optimal_height_cropped.tif"
+//url_optimal_height = "https://vlechappe.github.io/map/optimal_height.tif"
+const promise_optimal_height = fetch_response(url_optimal_height);
+//console.log(promise_optimal_height)
+
+var xRes = 0;
+var yRes = 0;
+var xmin = 0;
+var ymin = 0;
+var xmax = 0;
+var ymax = 0;
+var height = 0;
+var width = 0; 
+var vec_x = null;
+var vec_y = null;
+var array_roughness = null;
+var array_windspeed = null;
+var array_optimal_height = null;
+
+
+// use promise.all for control layer otherwise there would have been as many control layer as layers...
+// it is necessary to wait for all the promise to finish before doing the layer control creation
+const promiseall = Promise.all([promise_roughness,promise_windspeed, promise_optimal_height])
+  .then((responses)=>{
+    //console.log(responses[0]);
+    layer_roughness = GRtoGRL(responses[0], pixel_to_color_roughness)
+    //console.log(layer_roughness)
+    layer_windspeed = GRtoGRL(responses[1], pixel_to_color_windspeed)
+    //console.log(layer_windspeed);
+    layer_optimal_height = GRtoGRL(responses[2], pixel_to_color_optimal_height)
+    //console.log(layer_windspeed);
+    // instead of redifining noDataValue which does not work, the pixel color is redefined (see pixel_to_color functions)
+    //layer_roughness.noDataValue = 0;
+    //layer_windspeed.noDataValue = 0;
+    //layer_optimal_height.noDataValue = 0;
+    layer_roughness.addTo(map);
+    layer_windspeed.addTo(map);
+    layer_optimal_height.addTo(map);
+    // for pop up purposes
+    yRes = layer_roughness.pixelHeight;
+    xRes = layer_roughness.pixelWidth;
+    xmin = layer_roughness.xmin;
+    ymin = layer_roughness.ymin;
+    xmax = layer_roughness.xmax;
+    ymax = layer_roughness.ymax;
+    height = layer_roughness.height;
+    width = layer_roughness.width;
+    vec_x = makeArr(xmin, xmin+xRes*width, width+1);
+    vec_y = makeArr(ymin, ymin+yRes*height, height+1);
+    array_roughness = layer_roughness.georasters[0].values[0]
+    array_windspeed = layer_windspeed.georasters[0].values[0]
+    array_optimal_height = layer_optimal_height.georasters[0].values[0]
+
+    console.log(width)
+    console.log(height)
+    //console.log(layer_roughness) //[row][col]
+    //console.log(layer_optimal_height.georasters[0].maxs[0])
+    //console.log(layer_optimal_height.georasters[0].mins[1])
+    
+    // for layer control
+    layer_control.overlays["Roughness"]=layer_roughness;
+    layer_control.overlays["Windspeed"]=layer_windspeed;
+    layer_control.overlays["Optimal height"]=layer_optimal_height; 
+    L.control.layers(
+      layer_control.base_layers,
+      layer_control.overlays,
+      {"autoZIndex": true, "collapsed": false, "position": "topright"}
+      ).addTo(map);
+    map.fitBounds(layer_windspeed.getBounds());
+  })
+
+  
+
+
+    </script>
+  </body>
+</html>
+
