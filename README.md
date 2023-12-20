@@ -11,6 +11,8 @@ It also contains the codes used to create a tool to help the small wind turbine 
 - **map** contains a jupyter notebook to generate the optimal height tiff image and a html file to display tiff images on an interactive map using leaflet library
 - **LCA** contains all tha data for the wind turbine life cycle assessment
 
+To test the interface and see the map, go to the Github page [here](https://vlechappe.github.io/sustain-4-SWT/)
+
 Please feel free to contact us for more information.
 
 ## License
