@@ -41,7 +41,7 @@ const roughness_intervals = [0.0015, 0.004, 0.0075, 0.02, 0.04, 0.075, 0.15, 0.2
 const roughness_colors = ['#ff7f0eff','#2ca02cff','#1f77b4ff','#d62728ff','#8c564bff','#9467bdff','#e377c2ff','#7f7f7fff','#bcbd22ff','#17becfff','#1f77b4ff','#ffffbf','#fddbc7','#000000'];
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // windspeed colormap is continous between interval values (we could have extracted these values from the raster as well
-const windspeed_interval = [0,20];
+const windspeed_interval = [0,10];
 const windspeed_colormap = {};
 windspeed_colormap.color = d3.scale.linear()
       .domain(windspeed_interval)
