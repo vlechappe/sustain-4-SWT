@@ -12,3 +12,6 @@ It also contains the codes used to create a tool to help the small wind turbine 
 - **ACV** contains all tha data for the wind turbine life cycle assessment
 
 Please feel free to contact us for more information.
+
+## License
+ sustain 4 SWT © 2023 by Vincent Léchappé, Adrien Prévost is licensed under CC BY-NC-SA 4.0 
