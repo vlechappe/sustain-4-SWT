@@ -1,10 +1,9 @@
-# ACV-SWT-article
+# sustain 4 SWT
 This repository contains all the data and documents used to write the article :
 
+"Technico-environnemental analysis and recommendations for small wind turbine systems "
 
-"XXX"
-
-that has been submitted for publication in XXX and is currently under review. 
+that has been submitted for publication and is currently under review. 
 
 It also contains the codes used to create a tool to help the small wind turbine installation decision making. 
 
