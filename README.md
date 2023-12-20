@@ -1,5 +1,6 @@
 # ACV-SWT-article
-This page presents a preliminary version of a decision tool for small wind turbines installation. 
-The results presented hae submitted for publication in XXX and is currently nder review
+This repository contains all the data, codes and documents used to write the article :
+"XXX"
+that has been submitted for publication in XXX and is currently under review
 
 Please feel free to contact us for more information.
