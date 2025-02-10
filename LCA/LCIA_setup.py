@@ -4,7 +4,7 @@ import numpy as np
 # this list of tuples can be used to call LCIA methods in brightway
 methods_recommended=[
             ('EF v3.0','material resources: metals/minerals','abiotic depletion potential (ADP): elements (ultimate reserves)'),
-            ('EF v3.0','ecotoxicity: freshwater', 'comparative toxic unit for ecosystems (CTUe) '),
+            ('EF v3.0','ecotoxicity: freshwater', 'comparative toxic unit for ecosystems (CTUe)'),
             ('EF v3.0','climate change', 'global warming potential (GWP100)'),
             ('EF v3.0','energy resources: non-renewable','abiotic depletion potential (ADP): fossil fuels'),
             ('EF v3.0','particulate matter formation', 'impact on human health')
@@ -13,17 +13,17 @@ methods_recommended=[
 
 methods_EF=[('EF v3.0','acidification', 'accumulated exceedance (ae)'),
             ('EF v3.0','climate change', 'global warming potential (GWP100)'),
-            ('EF v3.0','ecotoxicity: freshwater', 'comparative toxic unit for ecosystems (CTUe) '),
+            ('EF v3.0','ecotoxicity: freshwater', 'comparative toxic unit for ecosystems (CTUe)'),
             ('EF v3.0','energy resources: non-renewable', 'abiotic depletion potential (ADP): fossil fuels'),
             ('EF v3.0','eutrophication: freshwater', 'fraction of nutrients reaching freshwater end compartment (P)'),
             ('EF v3.0','eutrophication: marine', 'fraction of nutrients reaching marine end compartment (N)'),
-            ('EF v3.0','eutrophication: terrestrial', 'accumulated exceedance (AE) '),
-            ('EF v3.0','human toxicity: carcinogenic', 'comparative toxic unit for human (CTUh) '),
-            ('EF v3.0','human toxicity: non-carcinogenic', 'comparative toxic unit for human (CTUh) '),
+            ('EF v3.0','eutrophication: terrestrial', 'accumulated exceedance (AE)'),
+            ('EF v3.0','human toxicity: carcinogenic', 'comparative toxic unit for human (CTUh)'),
+            ('EF v3.0','human toxicity: non-carcinogenic', 'comparative toxic unit for human (CTUh)'),
             ('EF v3.0','ionising radiation: human health', 'human exposure efficiency relative to u235'),
             ('EF v3.0','land use', 'soil quality index'),
             ('EF v3.0','material resources: metals/minerals', 'abiotic depletion potential (ADP): elements (ultimate reserves)'),
-            ('EF v3.0','ozone depletion', 'ozone depletion potential (ODP) '),
+            ('EF v3.0','ozone depletion', 'ozone depletion potential (ODP)'),
             ('EF v3.0','particulate matter formation', 'impact on human health'),
             ('EF v3.0','photochemical ozone formation: human health', 'tropospheric ozone concentration increase'),
             ('EF v3.0','water use', 'user deprivation potential (deprivation-weighted water consumption)')
