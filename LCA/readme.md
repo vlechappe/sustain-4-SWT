@@ -1,6 +1,6 @@
 # Technico-environmental model source code
 
-This repository contains all the source code used for the technico-environmental analysis presented in our article.
+This repository contains all the source code used in the article "[A framework for technico-environmental optimization of small wind turbines](https://scholar.google.fr/citations?view_op=view_citation&hl=fr&user=gg5w-8cAAAAJ&citation_for_view=gg5w-8cAAAAJ:u-x6o8ySG0sC)" 
 
 ## Requirements
 
