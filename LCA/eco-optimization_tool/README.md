@@ -10,7 +10,7 @@ conda config --append channels cmutel
 
 conda config --append channels bsteubing
 
-conda create -n ab activity-browser
+conda create -n ab activity-browser 
 ```
 
 3. Setup project on brightway 
@@ -18,7 +18,7 @@ conda create -n ab activity-browser
 ```
 activity-browser
 ```
-* create a new project called *swt_parametric_lca
+* create a new project called swt_parametric_lca
 * import biosphere 3.8
 * import ecoinvent 3.8 cutoff database, take care to name it precisely *ecoinvent-3.8-cutoff*
 
@@ -55,4 +55,15 @@ After running the first cell, you should be able to see the three databases of y
 
 If that is the case, you should be able to run all the file. Enjoy !
 
+### Run from VScode (optional)
+
+1. Make sure that anaconda is in your path. (Windows users, check [this](https://stackoverflow.com/questions/44515769/conda-is-not-recognized-as-internal-or-external-command))
+
+2. In the VScode terminal, run the followinf commande
+
+   ```
+   conda activate ab
+   ```
+
+3. Run the notebook (select the ab environment if VScode asks for it)
 
